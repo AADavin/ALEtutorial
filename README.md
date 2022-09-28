@@ -9,7 +9,7 @@ You need two things to run a reconciliation: a gene tree and a species tree. The
 
 In this example, we are going to use some simulated data I generated using **Zombi**. I generated a small species tree with 10 leaves and I simulated 100 gene families that were present in the root. The families evolved following events of Duplications, Transfers and Losses.  Zombi outputs the final gene trees, which is what we will use in this tutorial (there is no need to use a distribution of trees in this case because given that we are using simulated dated, we are certain about the topology of the tree). 
 
-The first thing to do is, for every gene family, (files in the Trees folder), obtain the .ale file. The .ale file contains the CCPs (conditional clade probabilities), which are used later by ALE to estimate the likelihood of the different reconciliations. The files are  very easy to obtain, the command is:
+The first thing to do is, for every gene family, (files in the Trees folder), obtain the .ale file. The .ale file contains the CCPs (conditional clade probabilities), which are used later by ALE to estimate the likelihood of the different reconciliations. The files are very easy to obtain, the command is:
 
 ```
 ALEobserve 1_prunedree.nwk
@@ -21,7 +21,7 @@ This will generate the file:
 10_prunedtree.nwk.ale
 
 
-The .ale files can be found in the folder ALEs.
+The .ale files can be found in the folder ALEs. The ALE file format is simply an efficient way to store information about the gene tree distribution that takes up less disk space than, for example, a complete set of bootstrap or MCMC trees in Newick format.
 
 
 Once we have this, we run the reconciliation by using the command:
@@ -30,7 +30,7 @@ Once we have this, we run the reconciliation by using the command:
 ALEml_undated  SpeciesTree.nwk 10_prunedtree.nwk.ale
 ```
 
-This will produce two files: the uml_rec file and the uTs file. All the files have already been computed antd the reader can inspect them in the different folders of this repository
+This will produce two files: the uml_rec file and the uTs file. All the files have already been computed and the reader can inspect them in the different folders of this repository.
 
 ### Parsing ALE results
 
