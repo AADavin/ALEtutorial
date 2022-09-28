@@ -1,0 +1,19 @@
+#constructor_string
+(n17_4:0.00496665,n18_5:0.00496665)n2_3:1;
+#observations
+1
+#Bip_counts
+1	1
+#Bip_bls
+1	0.00496665
+2	0.00496665
+#Dip_counts
+#last_leafset_id
+2
+#leaf-id
+n17_4	1
+n18_5	2
+#set-id
+1	:	1
+2	:	2
+#END
