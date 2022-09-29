@@ -11,9 +11,9 @@ def ale_parser(rec_folder, options):
     
     for rec_file in rec_files:
     
-        with open(rec_file) as f:
+        with open(os.path.join(rec_folder, rec_file)) as f:
             
-            fam = rec_file.split(".")[0]
+            fam = rec_file.replace(".ale.uml_rec", "")
             
             lines = f.readlines()
             stree = lines[2].strip()
@@ -39,12 +39,12 @@ def ale_parser(rec_folder, options):
             for info in table_info:
                 f.write("\t".join(info))            
     
-    if options[2]:    
-            
+    if options[2]:   
+           
         
         with open("TableEvents.tsv", "w") as f:
             
-            header = "Family\t" + table[0]
+            header = "Family\tBranchType\t" + table[0].replace("# of", "Branch")
             f.write(header)
             
             for fam, events in table_events:            

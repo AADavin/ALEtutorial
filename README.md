@@ -46,6 +46,7 @@ If the user is dealing with a large number of reconciliations, there is a differ
 python ale_parser.py -i FolderWithReconciliations -sft
 
 ```
+
 ### Interpreting ALE results
 
 ALE infers by default 100 reconciliations. The user can change that number easily.
@@ -68,9 +69,9 @@ What does it mean that a gene family has 0.5 transfers? The values represented i
 
 ### What is the meaning of the different columns
 
-"# of -  Code of the branch according to the Species Tree
+Branch -  Code of the branch according to the Species Tree
 
-Branch - Whether the branch is a terminal branch or an inner branch
+BranchType - Whether the branch is a terminal branch or an inner branch
 
 Duplications - Average number of Duplications events in the branch
 
@@ -82,20 +83,50 @@ Originations - Fraction of times that the Gene Family starts in this specific br
 
 Copies - Average number of copies in the branch
 
-Singletons - Average number of genes that are seeing as vertically evolving
+Singletons - Average number of genes that are seeing as vertically evolving, i.e. the gene can be found at the beginning of the branch and at the end
 
-Extinctinonprob - 
+Extinctinonprob - FINISH
 
-Presence - 
+Presence - FINISH
 
-LL - 
+LL - FINISH
+
+
+### Obtaining verticality
+
+In Coleman et al. 2021 (A rooted phylogeny of bacteria resolves early evolution), we proposed two metrics to evaluate the amount of transfers vs the amount of vertical evolution. The first one is verticality, a branch wise metric which is defined as the total number of singletons inferred in a branch divided by the singletons, originations and transfers.
+
+This measure can be obtained with (for example) pandas. The user can find a notebook in this repository (called AnalyzingResults.ipyb) that shows how to do it.
+
+
+ ```
+df = pd.read_csv("TableEvents.tsv", sep = "\t")
+
+dfb = df.groupby("Branch", as_index=False).sum()
+
+dfb["Verticality"] = dfb["singletons"] / (dfb["singletons"] + dfb["Originations"] + dfb["Transfers"])
+
+```
+
+The second metric is called transfer propensity, and it is a family metric. It measures, as the name indicates, how prone to be a transferred a family is.
+
+
+```
+
+df = pd.read_csv("TableEvents.tsv", sep = "\t")
+
+dff = df.groupby("Family").sum()
+
+dff["TransferPropensity"] = dff["Transfers"] / (dff["singletons"] + dff["Transfers"])
+
+```
 
 
 ### What are some things I need to consider when dealing with real data?
 
 There are at least two very important things to remember:
 
-1. Use a file fraction_missing . The reconcilation can consider that a gene might be missing from a genome not because the gene was lost, but because we don't know the complete sequence of the genome. When working with bacterial genomes for instance (Coleman 2021),  we use the genome completness estimates from CheckM.
+1. Use a file fraction_missing. The reconcilation can consider that a gene might be missing from a genome not because the gene was lost, but because we don't know the complete sequence of the genome. When working with bacterial genomes for instance (Coleman 2021),  we use the genome completness estimates from CheckM.
 2. Do use gene tree distributions and not single trees! See next point
 
 
