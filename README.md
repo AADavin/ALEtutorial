@@ -32,6 +32,10 @@ ALEml_undated  SpeciesTree.nwk 10_prunedtree.nwk.ale
 
 This will produce two files: the uml_rec file and the uTs file. All the files have already been computed and the reader can inspect them in the different folders of this repository.
 
+ 
+ **_NOTE:_**  The genes in the gene tree must have a mapping to the species tree. The noraml way is using this format: SPECIES_GENEID
+ 
+
 ### Parsing ALE results
 
 The script ale_splitter.py can be used to obtain that information in different files, which simplifies the process of parsing them with Python or R later:
@@ -46,6 +50,14 @@ If the user is dealing with a large number of reconciliations, there is a differ
 python ale_parser.py -i FolderWithReconciliations -sft
 
 ```
+### The reference tree
+
+ALE takes the input Species Tree and renames the innter nodes of the species tree. An easy way to visualize the tree is copying it and pasting into SeaView. For instance, the tree we are using in this example looks like this. 
+
+![alt text](images/SpeciesTreeIMG.png)
+
+In this tree, 12 corresponds to the name of the branch leading to the common ancestor of n18 and n17, 17 is the parent branch of branches 16 and 11, and so on. Those branch names are the name used in the uml_rec and uTs files.
+
 
 ### Interpreting ALE results
 
