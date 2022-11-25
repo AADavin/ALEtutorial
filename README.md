@@ -5,7 +5,7 @@ Evolution is often well represented by bifurcating trees. Different processes ca
 
 This is a simple tutorial on how to use ALE, a software that reconciles gene trees and species tree. In this tutorial, we are going to learn how to reconcile a gene tree and a species tree, and how to interpret the output of ALE.
 
-You need two things to run a reconciliation: a gene tree and a species tree. The species tree **can** be a dated tree, but this is not a requirement (see the section differences between ALE dated and ALE undated). The gene tree **can** be a distribution of gene trees, as the ones inferred by using the ultrafast bootsrap of IQ-TREE (toggle the -w option to write the individual trees). Using a gene tree distribution instead of a single tree is encouraged, because it informs ALE about the uncertainty in the topology of the tree and allows it to make better predictions.
+You need two things to run a reconciliation: a gene tree and a species tree. The species tree **can** be a dated tree, but this is not a requirement (see the section differences between ALE dated and ALE undated). The gene tree **can** be a distribution of gene trees, as the ones inferred by using the ultrafast bootsrap of IQ-TREE (toggle the -w option to write the individual trees). Using a gene tree distribution instead of a single tree is encouraged, because it informs ALE about the uncertainty in the topology of the gene tree and allows it to make better predictions.
 
 In this example, we are going to use some simulated data I generated using **Zombi**. I generated a small species tree with 10 leaves and I simulated 100 gene families that were present in the root. The families evolved following events of Duplications, Transfers and Losses.  Zombi outputs the final gene trees, which is what we will use in this tutorial (there is no need to use a distribution of trees in this case because given that we are using simulated dated, we are certain about the topology of the tree). 
 
@@ -18,10 +18,10 @@ ALEobserve 1_prunedree.nwk
 This will generate the file:
 
 
-10_prunedtree.nwk.ale
+1_prunedtree.nwk.ale
 
 
-The .ale files can be found in the folder ALEs. The ALE file format is simply an efficient way to store information about the gene tree distribution that takes up less disk space than, for example, a complete set of bootstrap or MCMC trees in Newick format.
+The .ale files can be found in the folder ALEs. The ALE file format is simply an efficient way to store information about the gene tree distribution that takes up less disk space than, for example, a complete set of bootstrap or MCMC trees in newick format.
 
 
 Once we have this, we run the reconciliation by using the command:
@@ -33,7 +33,7 @@ ALEml_undated  SpeciesTree.nwk 10_prunedtree.nwk.ale
 This will produce two files: the uml_rec file and the uTs file. All the files have already been computed and the reader can inspect them in the different folders of this repository.
 
  
- **_NOTE:_**  The genes in the gene tree must have a mapping to the species tree. The noraml way is using this format: SPECIES_GENEID
+ **_NOTE:_**  The genes in the gene tree must have a mapping to the species tree. The usual way is using this format: SPECIES_GENEID
  
 
 ### Parsing ALE results
@@ -52,7 +52,7 @@ python ale_parser.py -i FolderWithReconciliations -sft
 ```
 ### The reference tree
 
-ALE takes the input Species Tree and renames the innter nodes of the species tree. An easy way to visualize the tree is copying it and pasting into SeaView. For instance, the tree we are using in this example looks like this. 
+ALE takes the input Species Tree and renames the inner nodes of the species tree. An easy way to visualize the tree is copying it and pasting into SeaView. For instance, the tree we are using in this example looks like this. 
 
 ![alt text](images/SpeciesTreeIMG.png)
 
@@ -61,7 +61,7 @@ In this tree, 12 corresponds to the name of the branch leading to the common anc
 
 ### Interpreting ALE results
 
-ALE infers by default 100 reconciliations. The user can change that number easily.
+ALE infers by default 100 reconciliations.
 It creates two files
 
 * Files uTs: They contain information about the Lateral Gene Transfers. The columns indicate the donor branch, the recipient branch and the weight of the transfer, i.e. the number of times that the transfer has been found divided by the number of reconciliations
@@ -70,7 +70,7 @@ It creates two files
 
 1. The Species Tree. ALE renames the inner branches and uses these names to specify the different events. To view this branch nodes it is possible to use SeaView and toggle the option Br support
 2. The LogLikelihood of the reconciliation 
-3. The "rate" of Duplication, Transfer and Losses. Rates is the wrong name and has 
+3. The "rate" of Duplication, Transfer and Losses. Be aware that although these numbers are called rates, they should not be interpreted as standard rates, since ALE undated does not consider time.
 4. The reconciled gene trees. The gene trees have annotation in the inner branches that specify the exact reconciliation event.Since ALE is a probabilistic algorithm, those events might differ from tree to tree
 5. The number of D, T, L and Speciation events found, divided by the number of reconciliations
 6. A big table, divided by the number of reconciliations
@@ -97,11 +97,11 @@ Copies - Average number of copies in the branch
 
 Singletons - Average number of genes that are seeing as vertically evolving, i.e. the gene can be found at the beginning of the branch and at the end
 
-Extinctinonprob - FINISH
+Extinctinonprob - 
 
-Presence - FINISH
+Presence - 
 
-LL - FINISH
+LL - 
 
 
 ### Obtaining verticality
@@ -166,7 +166,5 @@ Etc
 
 ### What is the difference between ALE dated and ALE undated?
 
-ALE dated is the original model: in this model the transfers are inferred to occur between contemporary lineages. This is guaranteed by using as input a dated tree, i.e. a tree in which the branch lengths are proportional to time. These have different problems (see Davin et al 2022 for a more detailed discussion), but the main one is that obtaining dated trees is difficult. ALE dated is also slow. For that reason, ALE undated (Szollosi 2014)  was developed. Some of the transfers obtained can be time inconsistent
+ALE dated is the original model: in this model the transfers are inferred to occur between contemporary lineages. This is guaranteed by using as input a dated tree, i.e. a tree in which the branch lengths are proportional to time. These have different problems (see Davin et al 2022 for a more detailed discussion), but the main one is that obtaining dated trees is difficult. ALE dated is also slow. For that reason, ALE undated (Szollosi 2014)  was developed. Some of the transfers obtained can be time inconsistent (i.e. it is impossible to make a dated tree that meets all the constraints imposed by the transfers)
 
-### How do you deal with the uncertainties in the Species Tree?
-In its current version, ALE does not account for that uncertainty and Species Tree is taken at face value, so it is important to used well resolved trees. 
