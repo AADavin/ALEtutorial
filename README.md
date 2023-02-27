@@ -97,11 +97,11 @@ Copies - Average number of copies in the branch
 
 Singletons - Average number of genes that are seeing as vertically evolving, i.e. the gene can be found at the beginning of the branch and at the end
 
-Extinctinonprob - 
+Extinctinonprob - The likelihood that a gene present in this branch will eventually go extinct
 
-Presence - 
+Presence - Between 0 and 1, number of times the gene family is present in this branch
 
-LL - 
+LL - The likelihood of the gene family originating at this specific branch
 
 
 ### Obtaining verticality
